@@ -75,6 +75,23 @@ export class Tubular<T extends object> {
   }
 
   /**
+   * disconnects an observer callback from totally tubular
+   */
+  unobserve<K extends AllObjectKeys<T>, V = PropType<T, K & string>>(
+    propPath: K,
+    observeCallback: (newVal: V, oldVal: V) => void,
+  ) {
+    const observers = this.observationCallbacks.get(propPath);
+
+    if (!observers?.length) return;
+
+    this.observationCallbacks.set(
+      propPath,
+      observers.filter(ob => ob !== observeCallback),
+    );
+  }
+
+  /**
    * updates a portion of your state
    */
   update<K extends AllObjectKeys<T>>(
