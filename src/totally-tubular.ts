@@ -111,30 +111,3 @@ export class Tubular<T extends object> {
     this.observationCallbacks.get(updatePath)?.forEach(cb => cb(newVal, prevVal));
   }
 }
-interface MyThing {
-  drink: {
-    beer: boolean;
-    kind: string;
-  };
-  food: {
-    pasta: boolean;
-    pizza: boolean;
-  };
-}
-
-const initialState: MyThing = {
-  drink: {
-    beer: true,
-    kind: 'guiness',
-  },
-  food: {
-    pasta: false,
-    pizza: true,
-  },
-};
-
-const t = new Tubular(initialState);
-
-t.observe('drink.beer', (newVal, oldVal) => console.info('newVal', newVal, 'oldVal', oldVal));
-t.observe('drink', newVal => console.info('new val is', newVal));
-t.update('drink', old => ({ ...old, kind: 'pisswater' }));
