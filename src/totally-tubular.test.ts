@@ -86,7 +86,7 @@ describe('totally-tubular', () => {
     expect(pizzaOb).toHaveBeenCalledTimes(2);
   });
 
-  test('should observe and an array and object', () => {
+  test('should observe an an array and object', () => {
     const t = new Tubular(makeInitialState());
     const animalsOb = vi.fn();
     const drinkOb = vi.fn();
