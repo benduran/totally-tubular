@@ -1,12 +1,13 @@
 {
   "name": "totally-tubular",
   "type": "module",
-  "exports": {
-    ".": "./dist/totally-tubular.js"
-  },
+  "main": "./dist/totally-tubular.js",
   "types": "./dist/totally-tubular.d.ts",
   "typings": "./dist/totally-tubular.d.ts",
   "version": "0.0.1-beta.2",
+  "files": [
+    "dist/"
+  ],
   "scripts": {
     "build": "bun run clean && tsc",
     "clean": "rm -rf dist/",
