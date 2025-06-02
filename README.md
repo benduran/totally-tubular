@@ -69,7 +69,59 @@ console.info(t.read("meta.title")); // will print the updated 'Supreme Director'
 
 Since React is one of the most popular UI libraries, here is how you might mimick the vanilla example, above, but in a React application.
 
-**TODO**
+```tsx
+import { Tubular } from "totally-tubular";
+import { useEffect, useState } from "react";
+
+interface MyState {
+  permissions: {
+    entitlements: string[];
+  };
+  time: number;
+  username: string;
+}
+
+const initialState: MyState = {
+  permissions: { entitlements: [] },
+  username: "Test User",
+  time: Date.now(),
+};
+
+const t = new Tubular<MyState>(initialState);
+
+const getTime = (timestamp: number) => {
+  const d = new Date();
+  d.setTime(timestamp);
+  return d.toLocaleTimeString();
+};
+
+export default function App() {
+  /** state */
+  const [username, setUsername] = useState(initialState.username);
+  const [time, setTime] = useState(initialState.time);
+
+  /** effects */
+  useEffect(() => {
+    t.observe("username", (v) => setUsername(v));
+    t.observe("time", (t) => setTime(t));
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => t.update("time", (oldVal) => oldVal + 1000), 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  return (
+    <div>
+      <strong>User: {username}</strong>
+      <div>The time: {getTime(time)}</div>
+    </div>
+  );
+}
+```
 
 ## Things you should know
 
