@@ -1,10 +1,31 @@
 {
+  "license": "MIT",
+  "description": "A completely framework-agnostic, JavaScript / TypeScript state management and update broadcasting library wit zero dependencies, solid performance and a micro file size.",
   "name": "totally-tubular",
   "type": "module",
   "main": "./dist/totally-tubular.js",
   "types": "./dist/totally-tubular.d.ts",
   "typings": "./dist/totally-tubular.d.ts",
   "version": "0.1.0",
+  "keywords": [
+    "state",
+    "management",
+    "state management",
+    "zero-dependencies",
+    "zero dependencies",
+    "fast",
+    "simple",
+    "agnostic",
+    "framework agnostic"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benduran/totally-tubular.git"
+  },
+  "bugs": {
+    "url": "https://github.com/benduran/totally-tubular/issues"
+  },
+  "homepage": "https://github.com/benduran/totally-tubular#readme",
   "files": [
     "dist/"
   ],
