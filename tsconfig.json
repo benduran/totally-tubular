@@ -8,7 +8,7 @@
     "checkJs": true,
     "declaration": true,
     "outDir": "./dist",
-    "rootDir": "./",
+    "rootDir": "./src",
     "importsNotUsedAsValues": "remove",
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,
@@ -28,6 +28,6 @@
     "skipDefaultLibCheck": true,
     "skipLibCheck": true
   },
-  "include": ["src/", "./performanceTests.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src/"],
+  "exclude": ["node_modules", "./performanceTests.ts", "./src/totally-tubular.test.ts"]
 }

@@ -8,6 +8,8 @@
   "typings": "./dist/totally-tubular.d.ts",
   "version": "0.0.0",
   "scripts": {
+    "build": "bun run clean && tsc",
+    "clean": "rm -rf dist/",
     "test": "vitest run",
     "test:watch": "vitest"
   },

@@ -1,4 +1,4 @@
-import { AllObjectKeys, ObservationCallback, PropType } from './types.js';
+import type { AllObjectKeys, ObservationCallback, PropType } from './types.js';
 
 /**
  * A totally tubular instance that tracks a top-level
