@@ -36,4 +36,8 @@ export type PropType<T, P extends string> = P extends keyof T
       : never
     : never;
 
-export type ObservationCallback<T, K = AllObjectKeys<T>, V = PropType<T, K & string>> = (newVal: V, oldVal: V) => void;
+export type ObservationCallback<T, K = AllObjectKeys<T>, V = PropType<T, K & string>> = (
+  newVal: V,
+  oldVal: V,
+  propPath: K,
+) => void;

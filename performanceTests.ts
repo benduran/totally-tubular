@@ -1,5 +1,5 @@
-import { Tubular } from './src/totally-tubular';
-import type { AllObjectKeys } from './src/types';
+import { Tubular } from './src/totally-tubular.js';
+import type { AllObjectKeys } from './src/types.js';
 
 const THOUSAND = 1e3 as const;
 const TEN_THOUSAND = 1e4 as const;
@@ -400,28 +400,28 @@ function runPerfTest<T extends object>(
   amt: number,
   numObservers: number,
 ) {
-  const uno = new Tubular(initialState);
+  const t = new Tubular(initialState);
 
   for (let i = 0; i < numObservers; i++) {
-    uno.observe(updatePath as any, () => {});
+    t.observe(updatePath as any, () => {});
   }
 
-  const s1 = startPerf();
+  const perfTracker = startPerf();
 
-  let v = String(uno.read(updatePath));
+  let v = String(t.read(updatePath));
   for (let i = 0; i < amt; i++) {
     v += `-${i}`;
     // @ts-expect-error - don't care about typings for the perf test
-    uno.update(updatePath as any, () => v);
+    t.update(updatePath as any, () => v);
   }
 
-  const e1 = s1();
+  const end = perfTracker();
 
   console.info(
-    `${amt.toLocaleString()} updates to "${String(updatePath)}" string val with ${numObservers} observers: ${e1.seconds}s`,
+    `${amt.toLocaleString()} updates to "${String(updatePath)}" string val with ${numObservers} observers: ${end.seconds}s`,
   );
 
-  return uno;
+  return end;
 }
 
 function runAllPerfTests() {

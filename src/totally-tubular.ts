@@ -60,10 +60,10 @@ export class Tubular<T extends object> {
    */
   observe<K extends AllObjectKeys<T>, V = PropType<T, K & string>>(
     propPath: K,
-    observeCallback: (newVal: V, oldVal: V) => void,
+    observeCallback: (newVal: V, oldVal: V, propPath: K) => void,
   ) {
     const prevForPath = this.observationCallbacks.get(propPath) ?? [];
-    // @ts-expect-error - shut up, please
+    // @ts-expect-error - silce! they are the same
     this.observationCallbacks.set(propPath, [...prevForPath, observeCallback]);
   }
 
@@ -107,7 +107,7 @@ export class Tubular<T extends object> {
       return n;
     });
 
-    // @ts-expect-error - whatever
-    this.observationCallbacks.get(updatePath)?.forEach(cb => cb(newVal, prevVal));
+    // @ts-expect-error - runtime safe and solid in-IDE typing assistance, so silence as required
+    this.observationCallbacks.get(updatePath)?.forEach(cb => cb(newVal, prevVal, updatePath));
   }
 }
