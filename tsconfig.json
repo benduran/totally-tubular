@@ -8,7 +8,7 @@
     "checkJs": true,
     "declaration": true,
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "./",
     "importsNotUsedAsValues": "remove",
     "isolatedModules": true,
     "allowSyntheticDefaultImports": true,

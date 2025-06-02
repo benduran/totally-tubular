@@ -86,6 +86,59 @@ Since React is one of the most popular UI libraries, here is how you might mimic
 
 ### Machine specs
 
+#### Apple Machine
+
+CPU: M3 Max
+RAM: 36GB
+OS: MacOS Sequoia 15.5
+
+```
+-----shallow state object-----
+
+1,000 updates to "name" string val with 10 observers: 0.0036749580000000038s
+1,000 updates to "name" string val with 100 observers: 0.0004760830000000027s
+1,000 updates to "name" string val with 1000 observers: 0.002774291000000005s
+10,000 updates to "name" string val with 10 observers: 0.0014766249999999986s
+10,000 updates to "name" string val with 100 observers: 0.0023700000000000045s
+10,000 updates to "name" string val with 1000 observers: 0.010886792s
+100,000 updates to "name" string val with 10 observers: 0.012480834000000001s
+100,000 updates to "name" string val with 100 observers: 0.022641292000000007s
+100,000 updates to "name" string val with 1000 observers: 0.102325125s
+1,000,000 updates to "name" string val with 10 observers: 0.16086666700000002s
+1,000,000 updates to "name" string val with 100 observers: 0.26716437499999995s
+1,000,000 updates to "name" string val with 1000 observers: 1.0726739170000001s
+
+-----medium state object-----
+
+1,000 updates to "user.settings.theme" string val with 10 observers: 0.000344333000000006s
+1,000 updates to "user.settings.theme" string val with 100 observers: 0.00034458300000005695s
+1,000 updates to "user.settings.theme" string val with 1000 observers: 0.0011382089999999608s
+10,000 updates to "user.settings.theme" string val with 10 observers: 0.0012657919999999195s
+10,000 updates to "user.settings.theme" string val with 100 observers: 0.002091625000000022s
+10,000 updates to "user.settings.theme" string val with 1000 observers: 0.010777082999999948s
+100,000 updates to "user.settings.theme" string val with 10 observers: 0.009487583000000086s
+100,000 updates to "user.settings.theme" string val with 100 observers: 0.01902945799999998s
+100,000 updates to "user.settings.theme" string val with 1000 observers: 0.11656079100000011s
+1,000,000 updates to "user.settings.theme" string val with 10 observers: 0.14811841699999992s
+1,000,000 updates to "user.settings.theme" string val with 100 observers: 0.27773633299999984s
+1,000,000 updates to "user.settings.theme" string val with 1000 observers: 1.0240415829999998s
+
+-----deep state object-----
+
+1,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 10 observers: 0.0012417919999998049s
+1,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 100 observers: 0.0003201250000001892s
+1,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 1000 observers: 0.0011683750000001964s
+10,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 10 observers: 0.0014113330000000133s
+10,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 100 observers: 0.002289249999999811s
+10,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 1000 observers: 0.01099350000000004s
+100,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 10 observers: 0.014709209000000101s
+100,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 100 observers: 0.024220374999999877s
+100,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 1000 observers: 0.10777845800000023s
+1,000,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 10 observers: 0.22398191699999961s
+1,000,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 100 observers: 0.2829787500000002s
+1,000,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 1000 observers: 1.1015419579999999s
+```
+
 #### Windows Machine
 
 CPU: Intel i9-13900HX
