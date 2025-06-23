@@ -1,6 +1,6 @@
 # totally-tubular
 
-A completely framework-agnostic, JavaScript / TypeScript state management and update broadcasting library wit zero dependencies, solid performance and a micro file size.
+A completely framework-agnostic, JavaScript / TypeScript state management and update broadcasting library with zero dependencies, solid performance and a micro file size.
 
 **Woahhhh**
 
@@ -29,7 +29,7 @@ npm i totally-tubular --save
 ## Quick start
 
 ```typescript
-import { Tubular } from "./src/totally-tubular.js";
+import { Tubular } from "totally-tubular";
 
 interface MyStateShape {
   isActive: boolean;
