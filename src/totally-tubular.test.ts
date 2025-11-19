@@ -49,9 +49,9 @@ describe('totally-tubular', () => {
     t.update('drink.kind', () => v2);
     t.update('drink.kind', () => v3);
 
-    expect(ob).toHaveBeenNthCalledWith(1, v1, initialBeer);
-    expect(ob).toHaveBeenNthCalledWith(2, v2, v1);
-    expect(ob).toHaveBeenNthCalledWith(3, v3, v2);
+    expect(ob).toHaveBeenNthCalledWith(1, v1, initialBeer, 'drink.kind');
+    expect(ob).toHaveBeenNthCalledWith(2, v2, v1, 'drink.kind');
+    expect(ob).toHaveBeenNthCalledWith(3, v3, v2, 'drink.kind');
   });
 
   test('should update an array', () => {
@@ -86,7 +86,7 @@ describe('totally-tubular', () => {
     expect(pizzaOb).toHaveBeenCalledTimes(2);
   });
 
-  test('should observe an an array and object', () => {
+  test('should observe an array and object', () => {
     const t = new Tubular(makeInitialState());
     const animalsOb = vi.fn();
     const drinkOb = vi.fn();
@@ -96,9 +96,9 @@ describe('totally-tubular', () => {
     t.update('animals', prev => [...prev, 'more dogs']);
     t.update('drink', prev => ({ ...prev, beer: false, kind: 'water' }));
     t.update('drink', prev => ({ ...prev, beer: true, kind: 'is not beer' }));
-    expect(animalsOb).toHaveBeenNthCalledWith(1, ['dogs'], []);
-    expect(animalsOb).toHaveBeenNthCalledWith(2, ['dogs', 'more dogs'], ['dogs']);
-    expect(drinkOb).toHaveBeenNthCalledWith(1, { beer: false, kind: 'water' }, { beer: true, kind: 'guiness' });
-    expect(drinkOb).toHaveBeenNthCalledWith(2, { beer: true, kind: 'is not beer' }, { beer: false, kind: 'water' });
+    expect(animalsOb).toHaveBeenNthCalledWith(1, ['dogs'], [], 'animals');
+    expect(animalsOb).toHaveBeenNthCalledWith(2, ['dogs', 'more dogs'], ['dogs'], 'animals');
+    expect(drinkOb).toHaveBeenNthCalledWith(1, { beer: false, kind: 'water' }, { beer: true, kind: 'guiness' }, 'drink');
+    expect(drinkOb).toHaveBeenNthCalledWith(2, { beer: true, kind: 'is not beer' }, { beer: false, kind: 'water' }, 'drink');
   });
 });
