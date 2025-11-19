@@ -1,4 +1,4 @@
-import type { AllObjectKeys, ObservationCallback, PropType } from './types.js';
+import type { AllObjectKeys, ObservationCallback, PropType } from "./types.js";
 
 /**
  * A totally tubular instance that tracks a top-level
@@ -7,7 +7,10 @@ import type { AllObjectKeys, ObservationCallback, PropType } from './types.js';
  * you should construct your state to be a series of Tubular instances
  */
 export class Tubular<T extends object> {
-  private observationCallbacks: Map<AllObjectKeys<T>, ObservationCallback<T>[]> = new Map();
+  private observationCallbacks: Map<
+    AllObjectKeys<T>,
+    ObservationCallback<T>[]
+  > = new Map();
 
   private state: T;
 
@@ -15,21 +18,21 @@ export class Tubular<T extends object> {
     this.state = initialState;
   }
 
-  private doSomethingToPath<K extends AllObjectKeys<T>, V = PropType<T, K & string>>(
-    readPath: K,
-    doSomething: (currVal: V) => V,
-  ) {
+  private doSomethingToPath<
+    K extends AllObjectKeys<T>,
+    V = PropType<T, K & string>,
+  >(readPath: K, doSomething: (currVal: V) => V) {
     let thing: any = this.state;
 
-    if (typeof readPath !== 'string') {
+    if (typeof readPath !== "string") {
       return this.getPortionOfStateByPath(thing[readPath]);
     }
 
-    const splitPath = readPath.split('.');
+    const splitPath = readPath.split(".");
 
     const len = splitPath.length;
     for (let i = 0; i < len; i++) {
-      const p = splitPath[i] || '';
+      const p = splitPath[i] || "";
       if (i === len - 1) {
         if (thing) thing[p] = doSomething(thing[p]);
       } else thing = thing?.[p];
@@ -39,14 +42,17 @@ export class Tubular<T extends object> {
     }
   }
 
-  private getPortionOfStateByPath<K extends AllObjectKeys<T>, V = PropType<T, K & string>>(readPath: K): V | null {
+  private getPortionOfStateByPath<
+    K extends AllObjectKeys<T>,
+    V = PropType<T, K & string>,
+  >(readPath: K): V | null {
     let thing: any = this.state;
 
-    if (typeof readPath !== 'string') {
+    if (typeof readPath !== "string") {
       return this.getPortionOfStateByPath(thing[readPath]);
     }
 
-    const splitPath = readPath.split('.');
+    const splitPath = readPath.split(".");
 
     for (const p of splitPath) {
       thing = thing?.[p];
@@ -60,17 +66,18 @@ export class Tubular<T extends object> {
    */
   observe<K extends AllObjectKeys<T>, V = PropType<T, K & string>>(
     propPath: K,
-    observeCallback: (newVal: V, oldVal: V, propPath: K) => void,
+    observeCallback: ObservationCallback<T>,
   ) {
     const prevForPath = this.observationCallbacks.get(propPath) ?? [];
-    // @ts-expect-error - silce! they are the same
     this.observationCallbacks.set(propPath, [...prevForPath, observeCallback]);
   }
 
   /**
    * reads a portion of your state
    */
-  read<K extends AllObjectKeys<T>>(readPath: K): PropType<T, K & string> | null {
+  read<K extends AllObjectKeys<T>>(
+    readPath: K,
+  ): PropType<T, K & string> | null {
     return this.getPortionOfStateByPath(readPath);
   }
 
@@ -79,7 +86,7 @@ export class Tubular<T extends object> {
    */
   unobserve<K extends AllObjectKeys<T>, V = PropType<T, K & string>>(
     propPath: K,
-    observeCallback: (newVal: V, oldVal: V) => void,
+    observeCallback: ObservationCallback<T>,
   ) {
     const observers = this.observationCallbacks.get(propPath);
 
@@ -87,7 +94,7 @@ export class Tubular<T extends object> {
 
     this.observationCallbacks.set(
       propPath,
-      observers.filter(ob => ob !== observeCallback),
+      observers.filter((ob) => ob !== observeCallback),
     );
   }
 
@@ -101,13 +108,14 @@ export class Tubular<T extends object> {
     const prevVal = this.read(updatePath);
     let newVal: typeof prevVal | null = null;
 
-    this.doSomethingToPath(updatePath, oldVal => {
+    this.doSomethingToPath(updatePath, (oldVal) => {
       const n = valUpdater(oldVal);
       newVal = n;
       return n;
     });
 
-    // @ts-expect-error - runtime safe and solid in-IDE typing assistance, so silence as required
-    this.observationCallbacks.get(updatePath)?.forEach(cb => cb(newVal, prevVal, updatePath));
+    this.observationCallbacks
+      .get(updatePath)
+      ?.forEach((cb) => cb(newVal, prevVal, updatePath));
   }
 }

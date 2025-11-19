@@ -30,19 +30,28 @@
     "dist/"
   ],
   "scripts": {
-    "build": "bun run clean && tsc",
+    "build": "ts-duality --clean",
     "clean": "rm -rf dist/",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest --environment jsdom"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.8.1",
-    "@commitlint/config-conventional": "^19.8.1",
+    "@better-builds/ts-duality": "^0.3.0",
+    "@better-builds/lets-version": "^1.5.1",
+    "@commitlint/cli": "^20.1.0",
+    "@commitlint/config-conventional": "^20.0.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/bun": "latest",
-    "eslint-config-react-yas": "^5.2.2",
+    "@types/react": ">=18",
+    "eslint-config-react-yas": "^6.0.5",
+    "jsdom": "^27.2.0",
+    "react": ">=18",
     "typescript": "^5",
-    "vite": "^6.3.5",
-    "vitest": "^3.1.4"
+    "vite": "^7.2.2",
+    "vitest": "^4.0.10"
   },
-  "peerDependencies": {}
+  "optionalDependencies": {
+    "react": ">=18"
+  }
 }
