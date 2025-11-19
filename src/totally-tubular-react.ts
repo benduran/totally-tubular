@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { Tubular } from './totally-tubular.js';
-import { AllObjectKeys, ObservationCallback } from './types.js';
+import { AllObjectKeys, ObservationCallback, PropType } from './types.js';
 
 /**
  * All the same behavior as the normally Tubular class,
@@ -17,27 +16,27 @@ export class TubularReact<T extends object> extends Tubular<T> {
    * of Tubular state
    */
   useState<K extends AllObjectKeys<T>>(key: K) {
-    /** state */
-    const [val, setVal] = useState(this.read(key));
+    type ValueType = PropType<T, K & string>;
 
-    /** refs */
-    const prevVal = useRef<typeof val>(null);
+    /** state */
+    const [val, setVal] = useState<ValueType | null>(this.read(key));
 
     /** callbacks */
-    const handleUpdateVal = useCallback((newValOrCallback: typeof val | ((prevVal: typeof val) => typeof val)) => {
-      if (typeof newValOrCallback === 'function') {
-        // @ts-expect-error - ts is extremely confused by this and doesn't know this is a function
-        const newVal = newValOrCallback(prevVal.current);
-        setVal(newVal as typeof val);
-        return;
-      }
-      setVal(newValOrCallback);
-    }, []);
+    const handleUpdateVal = useCallback(
+      (newValOrCallback: ValueType | ((prevVal: ValueType | null) => ValueType)) => {
+        if (typeof newValOrCallback === 'function') {
+          this.update(key, newValOrCallback as (oldVal: ValueType) => ValueType);
+        } else {
+          this.update(key, () => newValOrCallback);
+        }
+      },
+      [key],
+    );
 
     /** effects */
     useEffect(() => {
       const observeCb: ObservationCallback<T> = newVal => {
-        setVal(newVal as typeof val);
+        setVal(newVal as ValueType | null);
       };
 
       this.observe(key, observeCb);
@@ -47,6 +46,6 @@ export class TubularReact<T extends object> extends Tubular<T> {
       };
     }, [key]);
 
-    return useMemo(() => [val, handleUpdateVal], [val, handleUpdateVal]);
+    return [val, handleUpdateVal] as const;
   }
 }

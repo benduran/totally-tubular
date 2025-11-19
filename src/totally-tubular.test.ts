@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from 'vitest';
+import { describe, expect, test, vi } from 'bun:test';
 
 import { Tubular } from './totally-tubular.js';
 
@@ -88,7 +88,7 @@ describe('totally-tubular', () => {
 
   test('should observe an array and object', () => {
     const t = new Tubular(makeInitialState());
-    const animalsOb = vi.fn((uno) => console.info('uno', uno));
+    const animalsOb = vi.fn();
     const drinkOb = vi.fn();
     t.observe('animals', animalsOb);
     t.observe('drink', drinkOb);
