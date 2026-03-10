@@ -52,5 +52,38 @@
   },
   "optionalDependencies": {
     "react": ">=18"
+  },
+  "exports": {
+    "./react": {
+      "require": {
+        "types": "./dist/cjs/react.d.ts",
+        "default": "./dist/cjs/react.cjs"
+      },
+      "import": {
+        "types": "./dist/esm/react.d.ts",
+        "default": "./dist/esm/react.mjs"
+      }
+    },
+    "./totally-tubular": {
+      "require": {
+        "types": "./dist/cjs/totally-tubular.d.ts",
+        "default": "./dist/cjs/totally-tubular.cjs"
+      },
+      "import": {
+        "types": "./dist/esm/totally-tubular.d.ts",
+        "default": "./dist/esm/totally-tubular.mjs"
+      }
+    },
+    "./types": {
+      "require": {
+        "types": "./dist/cjs/types.d.ts",
+        "default": "./dist/cjs/types.cjs"
+      },
+      "import": {
+        "types": "./dist/esm/types.d.ts",
+        "default": "./dist/esm/types.mjs"
+      }
+    },
+    "./package.json": "./package.json"
   }
 }

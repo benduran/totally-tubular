@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'bun:test';
 import { act, renderHook } from '@testing-library/react';
+import { useTubular } from './react.js';
 import { Tubular } from './totally-tubular.js';
-import { useTubular } from './totally-tubular-react.js';
 
 interface MyThing {
   animals: string[];
