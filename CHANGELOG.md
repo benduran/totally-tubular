@@ -1,3 +1,11 @@
+## 0.3.0 (2026-03-10)
+
+### ✨ Features ✨
+
+- feat: improved typechecking performance, updated the docs and the react hook (3ebe3788274591f491903a61cf99e8d777c22e8d)
+
+---
+
 ## 0.2.0 (2025-11-19)
 
 ### ✨ Features ✨
