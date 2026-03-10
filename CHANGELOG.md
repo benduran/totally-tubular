@@ -1,3 +1,11 @@
+## 0.3.1 (2026-03-10)
+
+### 🛠️ Fixes 🛠️
+
+- fix: fixed exports and build to not include test files (4638e83e6e076c311d64d1410d70af6dfe1640b4)
+
+---
+
 ## 0.3.0 (2026-03-10)
 
 ### ✨ Features ✨
