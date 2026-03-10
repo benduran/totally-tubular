@@ -434,9 +434,24 @@ function runAllPerfTests() {
   runPerfTest<ShallowState>(initialShallowData, 'name', TEN_THOUSAND, 10);
   runPerfTest<ShallowState>(initialShallowData, 'name', TEN_THOUSAND, 100);
   runPerfTest<ShallowState>(initialShallowData, 'name', TEN_THOUSAND, THOUSAND);
-  runPerfTest<ShallowState>(initialShallowData, 'name', ONE_HUNDRED_THOUSAND, 10);
-  runPerfTest<ShallowState>(initialShallowData, 'name', ONE_HUNDRED_THOUSAND, 100);
-  runPerfTest<ShallowState>(initialShallowData, 'name', ONE_HUNDRED_THOUSAND, THOUSAND);
+  runPerfTest<ShallowState>(
+    initialShallowData,
+    'name',
+    ONE_HUNDRED_THOUSAND,
+    10,
+  );
+  runPerfTest<ShallowState>(
+    initialShallowData,
+    'name',
+    ONE_HUNDRED_THOUSAND,
+    100,
+  );
+  runPerfTest<ShallowState>(
+    initialShallowData,
+    'name',
+    ONE_HUNDRED_THOUSAND,
+    THOUSAND,
+  );
   runPerfTest<ShallowState>(initialShallowData, 'name', ONE_MILLION, 10);
   runPerfTest<ShallowState>(initialShallowData, 'name', ONE_MILLION, 100);
   runPerfTest<ShallowState>(initialShallowData, 'name', ONE_MILLION, THOUSAND);
@@ -447,16 +462,51 @@ function runAllPerfTests() {
 
   runPerfTest<MediumState>(mediumData, 'user.settings.theme', THOUSAND, 10);
   runPerfTest<MediumState>(mediumData, 'user.settings.theme', THOUSAND, 100);
-  runPerfTest<MediumState>(mediumData, 'user.settings.theme', THOUSAND, THOUSAND);
+  runPerfTest<MediumState>(
+    mediumData,
+    'user.settings.theme',
+    THOUSAND,
+    THOUSAND,
+  );
   runPerfTest<MediumState>(mediumData, 'user.settings.theme', TEN_THOUSAND, 10);
-  runPerfTest<MediumState>(mediumData, 'user.settings.theme', TEN_THOUSAND, 100);
-  runPerfTest<MediumState>(mediumData, 'user.settings.theme', TEN_THOUSAND, THOUSAND);
-  runPerfTest<MediumState>(mediumData, 'user.settings.theme', ONE_HUNDRED_THOUSAND, 10);
-  runPerfTest<MediumState>(mediumData, 'user.settings.theme', ONE_HUNDRED_THOUSAND, 100);
-  runPerfTest<MediumState>(mediumData, 'user.settings.theme', ONE_HUNDRED_THOUSAND, THOUSAND);
+  runPerfTest<MediumState>(
+    mediumData,
+    'user.settings.theme',
+    TEN_THOUSAND,
+    100,
+  );
+  runPerfTest<MediumState>(
+    mediumData,
+    'user.settings.theme',
+    TEN_THOUSAND,
+    THOUSAND,
+  );
+  runPerfTest<MediumState>(
+    mediumData,
+    'user.settings.theme',
+    ONE_HUNDRED_THOUSAND,
+    10,
+  );
+  runPerfTest<MediumState>(
+    mediumData,
+    'user.settings.theme',
+    ONE_HUNDRED_THOUSAND,
+    100,
+  );
+  runPerfTest<MediumState>(
+    mediumData,
+    'user.settings.theme',
+    ONE_HUNDRED_THOUSAND,
+    THOUSAND,
+  );
   runPerfTest<MediumState>(mediumData, 'user.settings.theme', ONE_MILLION, 10);
   runPerfTest<MediumState>(mediumData, 'user.settings.theme', ONE_MILLION, 100);
-  runPerfTest<MediumState>(mediumData, 'user.settings.theme', ONE_MILLION, THOUSAND);
+  runPerfTest<MediumState>(
+    mediumData,
+    'user.settings.theme',
+    ONE_MILLION,
+    THOUSAND,
+  );
 
   console.info('');
   console.info('-----deep state object-----');
@@ -465,21 +515,52 @@ function runAllPerfTests() {
   // This is the long, non-array update path we want to test.
   // The target property is:
   // deepSettings.level1.level2.level3.level4.level5.level6.currentValue
-  const deepUpdatePath = 'zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue';
+  const deepUpdatePath =
+    'zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue';
 
   // Now we update the performance tests to use our new deep state and update path.
   runPerfTest<UltraDeepState>(ultraDeepData, deepUpdatePath, THOUSAND, 10);
   runPerfTest<UltraDeepState>(ultraDeepData, deepUpdatePath, THOUSAND, 100);
-  runPerfTest<UltraDeepState>(ultraDeepData, deepUpdatePath, THOUSAND, THOUSAND);
+  runPerfTest<UltraDeepState>(
+    ultraDeepData,
+    deepUpdatePath,
+    THOUSAND,
+    THOUSAND,
+  );
   runPerfTest<UltraDeepState>(ultraDeepData, deepUpdatePath, TEN_THOUSAND, 10);
   runPerfTest<UltraDeepState>(ultraDeepData, deepUpdatePath, TEN_THOUSAND, 100);
-  runPerfTest<UltraDeepState>(ultraDeepData, deepUpdatePath, TEN_THOUSAND, THOUSAND);
-  runPerfTest<UltraDeepState>(ultraDeepData, deepUpdatePath, ONE_HUNDRED_THOUSAND, 10);
-  runPerfTest<UltraDeepState>(ultraDeepData, deepUpdatePath, ONE_HUNDRED_THOUSAND, 100);
-  runPerfTest<UltraDeepState>(ultraDeepData, deepUpdatePath, ONE_HUNDRED_THOUSAND, THOUSAND);
+  runPerfTest<UltraDeepState>(
+    ultraDeepData,
+    deepUpdatePath,
+    TEN_THOUSAND,
+    THOUSAND,
+  );
+  runPerfTest<UltraDeepState>(
+    ultraDeepData,
+    deepUpdatePath,
+    ONE_HUNDRED_THOUSAND,
+    10,
+  );
+  runPerfTest<UltraDeepState>(
+    ultraDeepData,
+    deepUpdatePath,
+    ONE_HUNDRED_THOUSAND,
+    100,
+  );
+  runPerfTest<UltraDeepState>(
+    ultraDeepData,
+    deepUpdatePath,
+    ONE_HUNDRED_THOUSAND,
+    THOUSAND,
+  );
   runPerfTest<UltraDeepState>(ultraDeepData, deepUpdatePath, ONE_MILLION, 10);
   runPerfTest<UltraDeepState>(ultraDeepData, deepUpdatePath, ONE_MILLION, 100);
-  runPerfTest<UltraDeepState>(ultraDeepData, deepUpdatePath, ONE_MILLION, THOUSAND);
+  runPerfTest<UltraDeepState>(
+    ultraDeepData,
+    deepUpdatePath,
+    ONE_MILLION,
+    THOUSAND,
+  );
 }
 
 runAllPerfTests();

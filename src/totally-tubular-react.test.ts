@@ -1,9 +1,9 @@
-import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it } from 'bun:test';
-import { TubularReact } from './totally-tubular-react.js';
+import { act, renderHook } from '@testing-library/react';
+import { Tubular } from './totally-tubular.js';
+import { useTubular } from './totally-tubular-react.js';
 
-describe('TubularReact', () => {
-  interface MyThing {
+interface MyThing {
   animals: string[];
   drink: {
     beer: boolean;
@@ -27,24 +27,22 @@ const makeInitialState = (): MyThing => ({
   },
 });
 
-  it('should read a value from state', () => {
+describe('useTubular', () => {
+  it('should read an initial value from a Tubular instance', () => {
     const initial = makeInitialState();
-    const beer = 'Guiness 0.0%';
-    initial.drink.kind = beer;
+    initial.drink.kind = 'Guiness 0.0%';
+    const t = new Tubular(initial);
 
-    const t = new TubularReact(initial);
+    const { result } = renderHook(() => useTubular(t, 'drink.kind'));
 
-    const { result } = renderHook(() => t.useState('drink.kind'));
-
-    expect(result.current[0]).toBe(beer);
+    expect(result.current[0]).toBe('Guiness 0.0%');
   });
 
-  it('should read a value from state, update it, then read it again', () => {
-    const initial = makeInitialState();
-    const animals = ['dogs', 'more dogs', 'extra dogs'];
-    const t = new TubularReact(initial);
+  it('should update a top-level value and reflect the change', () => {
+    const t = new Tubular(makeInitialState());
+    const animals = ['cats', 'dogs'];
 
-    const { result, rerender } = renderHook(() => t.useState('animals'));
+    const { result, rerender } = renderHook(() => useTubular(t, 'animals'));
     expect(result.current[0]).toEqual([]);
 
     act(() => {
@@ -55,18 +53,62 @@ const makeInitialState = (): MyThing => ({
     expect(result.current[0]).toEqual(animals);
   });
 
-  it('should read a deep-state (lol) value, update it and ensure it is properly updated', () => {
-    const initial = makeInitialState();
-    const t = new TubularReact(initial);
+  it('should update a nested value using a callback updater', () => {
+    const t = new Tubular(makeInitialState());
 
-    const { result, rerender } = renderHook(() => t.useState('food.pasta'));
+    const { result, rerender } = renderHook(() => useTubular(t, 'food.pasta'));
     expect(result.current[0]).toBeFalse();
 
     act(() => {
-      result.current[1](prev => !prev);
+      result.current[1]((prev) => !prev);
     });
 
     rerender();
     expect(result.current[0]).toBeTrue();
+  });
+
+  it('should notify all hooks observing the same key when one updates', () => {
+    const t = new Tubular(makeInitialState());
+
+    const { result: resultA, rerender: rerenderA } = renderHook(() =>
+      useTubular(t, 'drink.beer'),
+    );
+    const { result: resultB, rerender: rerenderB } = renderHook(() =>
+      useTubular(t, 'drink.beer'),
+    );
+
+    expect(resultA.current[0]).toBeTrue();
+    expect(resultB.current[0]).toBeTrue();
+
+    act(() => {
+      resultA.current[1](false);
+    });
+
+    rerenderA();
+    rerenderB();
+    expect(resultA.current[0]).toBeFalse();
+    expect(resultB.current[0]).toBeFalse();
+  });
+
+  it('should unobserve when the hook unmounts', () => {
+    const t = new Tubular(makeInitialState());
+
+    const { result, unmount } = renderHook(() => useTubular(t, 'drink.kind'));
+
+    expect(result.current[0]).toBe('guiness');
+
+    unmount();
+
+    // Update after unmount — the store still works, but the unmounted hook
+    // should no longer be observing so no "update on unmounted component" error occurs.
+    act(() => {
+      t.update('drink.kind', () => 'stella');
+    });
+
+    // Verify the store update took effect via a fresh hook instance.
+    const { result: freshResult } = renderHook(() =>
+      useTubular(t, 'drink.kind'),
+    );
+    expect(freshResult.current[0]).toBe('stella');
   });
 });

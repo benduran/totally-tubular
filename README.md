@@ -1,24 +1,14 @@
 # totally-tubular
 
-A completely framework-agnostic, JavaScript / TypeScript state management and update broadcasting library with zero dependencies, solid performance and a micro file size.
+A framework-agnostic JavaScript / TypeScript state management library with zero dependencies, a tiny file size, and solid performance.
 
-**Woahhhh**
+## Why another state management library?
 
-## But why is there _another_ state management library? I already use XYZ library.
+State management has a tendency to get complicated fast. This library is an experiment in keeping things simple:
 
-Great! I'm glad you found something that works for you!
-This library (`totally-tubular`) was an experiment that manifested out of feeling
-like state management is overcomplicated these days and often riddled with "gotchas"
-and easy-to-oopsie performance faux pas.
-
-Additionally, our shipped JavaScript bundles should be getting **smaller**, not **bigger**,
-but it's all-too-easy, especially when crafting enterprise software, to keep shoving more libraries
-into your bundle with questionable benefits, when there often exists a much simpler, closer-to-vanilla
-way to do what you need to do.
-
-As a final point, your state management system should be fully-portable, so if you swap out
-your rendering layer, be it React, Svelte, Angular, or something else, the meat-and-potatoes of
-your state management shouldn't need to be fully rewritten.
+- **Portable.** Your store is plain TypeScript. If you swap React for Svelte, or add a Node.js background worker, the store itself doesn't change.
+- **Small.** No framework coupling, no middleware pipeline, no magic — just a class that holds state, lets you read it, update it, and watch it for changes.
+- **Honest.** It mutates your state in place for performance. If you want immutability, return new objects from your updater functions.
 
 ## Install
 
@@ -26,12 +16,25 @@ your state management shouldn't need to be fully rewritten.
 npm i totally-tubular --save
 ```
 
+## Core concepts
+
+A `Tubular` instance wraps an object and gives you four things:
+
+| Method | What it does |
+|---|---|
+| `read(path)` | Returns the current value at a dot-separated path |
+| `update(path, fn)` | Calls `fn` with the current value, stores the return value, then notifies all observers |
+| `observe(path, fn)` | Registers a callback that fires whenever `path` is updated |
+| `unobserve(path, fn)` | Removes a previously registered callback |
+
+Paths are fully type-checked. TypeScript knows every valid dot-path into your state shape, so you get autocomplete and a compile error if you mistype a key.
+
 ## Quick start
 
 ```typescript
 import { Tubular } from "totally-tubular";
 
-interface MyStateShape {
+interface AppState {
   isActive: boolean;
   count: number;
   meta: {
@@ -40,107 +43,89 @@ interface MyStateShape {
   name: string;
 }
 
-const initialState: MyStateShape = {
+const store = new Tubular<AppState>({
   isActive: false,
   count: 123,
-  meta: {
-    title: "Director",
-  },
+  meta: { title: "Director" },
   name: "Test User",
-};
+});
 
-const t = new Tubular(initialState);
-
-// listen to any of the keys / values in your state object for changes
-// and do whatever you need with the values
-t.observe("meta.title", (newVal, oldVal, propPath) =>
-  console.info(propPath, "was updated from", oldVal, "to", newVal),
+// Watch a value for changes
+store.observe("meta.title", (newVal, oldVal) =>
+  console.info("title changed from", oldVal, "to", newVal),
 );
 
-console.info(t.read("meta.title")); // will print 'Director'
+console.info(store.read("meta.title")); // "Director"
 
-// update any of the keys / values in your state object.
-// all observers will be notified after the value has been set
-t.update("meta.title", (prev) => `Supreme ${prev}`);
-console.info(t.read("meta.title")); // will print the updated 'Supreme Director' value
+// Update a value — all observers are notified immediately after
+store.update("meta.title", (prev) => `Supreme ${prev}`);
+
+console.info(store.read("meta.title")); // "Supreme Director"
 ```
 
-### React example
+## React
 
-Since React is one of the most popular UI libraries, here is how you might mimick the vanilla example, above, but in a React application.
+Import `useTubular` from `totally-tubular/react`. It works exactly like React's
+built-in `useState` — you get back a `[value, setter]` tuple — except the value
+comes from your store and every component watching the same path re-renders when
+it changes.
 
 ```tsx
 import { Tubular } from "totally-tubular";
-import { useEffect, useState } from "react";
+import { useTubular } from "totally-tubular/react";
 
-interface MyState {
-  permissions: {
-    entitlements: string[];
-  };
-  time: number;
-  username: string;
+interface AppState {
+  user: { name: string };
+  count: number;
 }
 
-const initialState: MyState = {
-  permissions: { entitlements: [] },
-  username: "Test User",
-  time: Date.now(),
-};
+// Create the store once, outside your components
+const store = new Tubular<AppState>({
+  user: { name: "Alice" },
+  count: 0,
+});
 
-const t = new Tubular<MyState>(initialState);
-
-const getTime = (timestamp: number) => {
-  const d = new Date();
-  d.setTime(timestamp);
-  return d.toLocaleTimeString();
-};
-
-export default function App() {
-  /** state */
-  const [username, setUsername] = useState(initialState.username);
-  const [time, setTime] = useState(initialState.time);
-
-  /** effects */
-  useEffect(() => {
-    t.observe("username", (v) => setUsername(v));
-    t.observe("time", (t) => setTime(t));
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => t.update("time", (oldVal) => oldVal + 1000), 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+function Counter() {
+  const [count, setCount] = useTubular(store, "count");
 
   return (
-    <div>
-      <strong>User: {username}</strong>
-      <div>The time: {getTime(time)}</div>
-    </div>
+    <button onClick={() => setCount((n) => (n ?? 0) + 1)}>
+      Clicked {count} times
+    </button>
   );
+}
+
+function Greeting() {
+  // Read-only — just destructure the first element
+  const [name] = useTubular(store, "user.name");
+  return <p>Hello, {name}!</p>;
 }
 ```
 
+The setter accepts either a plain value or an updater function:
+
+```ts
+// Plain value
+setCount(10);
+
+// Updater function (receives the current value)
+setCount((prev) => (prev ?? 0) + 1);
+```
+
+`useTubular` automatically unsubscribes when the component unmounts, so you
+don't need to manage cleanup yourself.
+
 ## Things you should know
 
-- This library _does not_ support observing arbitrary indices in an array, or objects inside of an array.
-  This is intentional.
-  If you want to be notified of changes to an array or you want to update some item in an array, you should use the path to the array in your state object, then perform reads or transformations on that.
-- This library **mutates your originally-provided `initialState`**.
-  This is for performance reasons, as mutating objects doesn't require cloning and iterating on all object properties, saving on computation time.
-  If you want to ensure immutability, you should make your calls to `.update()` return new objects, array, etc.
+- **Arrays and nested objects are observed at their path, not their contents.**
+  `observe("items", fn)` fires when `items` itself is replaced. To add an item
+  to an array, use `update("items", prev => [...prev, newItem])`.
+- **Arbitrary array indices are not observable.** You cannot do `observe("items.0", fn)`. If you need per-item reactivity, store each item in its own `Tubular` instance.
+- **State is mutated in place.** `totally-tubular` does not clone your state on every update. This keeps things fast, but means the object you pass to `new Tubular(initialState)` will be modified directly. If that matters to you, pass a deep clone as the initial state.
 
-## (Extra) Synthetic Performance Benchmarks
+## Performance benchmarks
 
-### Machine specs
-
-#### Apple Machine
-
-CPU: M3 Max
-RAM: 36GB
-OS: MacOS Sequoia 15.5
+### Apple M3 Max · 36 GB RAM · macOS Sequoia 15.5
 
 ```
 -----shallow state object-----
@@ -189,11 +174,7 @@ OS: MacOS Sequoia 15.5
 1,000,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 1000 observers: 1.1015419579999999s
 ```
 
-#### Windows Machine
-
-CPU: Intel i9-13900HX
-RAM: 32GB
-OS: Windows 11
+### Intel i9-13900HX · 32 GB RAM · Windows 11
 
 ```
 -----shallow state object-----

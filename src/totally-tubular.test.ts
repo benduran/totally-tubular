@@ -56,15 +56,18 @@ describe('totally-tubular', () => {
 
   test('should update an array', () => {
     const t = new Tubular(makeInitialState());
-    t.update('animals', prev => [...prev, 'birds']);
-    t.update('animals', prev => [...prev, 'cats']);
-    t.update('animals', prev => [...prev, 'dogs']);
+    t.update('animals', (prev) => [...prev, 'birds']);
+    t.update('animals', (prev) => [...prev, 'cats']);
+    t.update('animals', (prev) => [...prev, 'dogs']);
     expect(t.read('animals')).toStrictEqual(['birds', 'cats', 'dogs']);
   });
 
   test('should update one item in an array', () => {
-    const t = new Tubular({ ...makeInitialState(), animals: ['beagle', 'corgie', 'dachshund'] });
-    t.update('animals', prev => prev.toSpliced(1, 1, 'yorkie'));
+    const t = new Tubular({
+      ...makeInitialState(),
+      animals: ['beagle', 'corgie', 'dachshund'],
+    });
+    t.update('animals', (prev) => prev.toSpliced(1, 1, 'yorkie'));
     expect(t.read('animals')).toStrictEqual(['beagle', 'yorkie', 'dachshund']);
   });
 
@@ -74,11 +77,11 @@ describe('totally-tubular', () => {
     const pizzaOb = vi.fn();
     t.observe('food.pasta', foodOb);
     t.observe('food.pizza', pizzaOb);
-    t.update('food.pasta', prev => !prev);
-    t.update('food.pizza', prev => !prev);
+    t.update('food.pasta', (prev) => !prev);
+    t.update('food.pizza', (prev) => !prev);
     t.unobserve('food.pasta', foodOb);
-    t.update('food.pasta', prev => !prev);
-    t.update('food.pizza', prev => !prev);
+    t.update('food.pasta', (prev) => !prev);
+    t.update('food.pizza', (prev) => !prev);
 
     expect(t.read('food.pasta')).toBeFalsy();
     expect(t.read('food.pizza')).toBeTruthy();
@@ -92,13 +95,28 @@ describe('totally-tubular', () => {
     const drinkOb = vi.fn();
     t.observe('animals', animalsOb);
     t.observe('drink', drinkOb);
-    t.update('animals', prev => [...prev, 'dogs']);
-    t.update('animals', prev => [...prev, 'more dogs']);
-    t.update('drink', prev => ({ ...prev, beer: false, kind: 'water' }));
-    t.update('drink', prev => ({ ...prev, beer: true, kind: 'is not beer' }));
+    t.update('animals', (prev) => [...prev, 'dogs']);
+    t.update('animals', (prev) => [...prev, 'more dogs']);
+    t.update('drink', (prev) => ({ ...prev, beer: false, kind: 'water' }));
+    t.update('drink', (prev) => ({ ...prev, beer: true, kind: 'is not beer' }));
     expect(animalsOb).toHaveBeenNthCalledWith(1, ['dogs'], [], 'animals');
-    expect(animalsOb).toHaveBeenNthCalledWith(2, ['dogs', 'more dogs'], ['dogs'], 'animals');
-    expect(drinkOb).toHaveBeenNthCalledWith(1, { beer: false, kind: 'water' }, { beer: true, kind: 'guiness' }, 'drink');
-    expect(drinkOb).toHaveBeenNthCalledWith(2, { beer: true, kind: 'is not beer' }, { beer: false, kind: 'water' }, 'drink');
+    expect(animalsOb).toHaveBeenNthCalledWith(
+      2,
+      ['dogs', 'more dogs'],
+      ['dogs'],
+      'animals',
+    );
+    expect(drinkOb).toHaveBeenNthCalledWith(
+      1,
+      { beer: false, kind: 'water' },
+      { beer: true, kind: 'guiness' },
+      'drink',
+    );
+    expect(drinkOb).toHaveBeenNthCalledWith(
+      2,
+      { beer: true, kind: 'is not beer' },
+      { beer: false, kind: 'water' },
+      'drink',
+    );
   });
 });

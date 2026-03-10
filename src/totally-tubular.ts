@@ -1,4 +1,4 @@
-import type { AllObjectKeys, ObservationCallback, PropType } from "./types.js";
+import type { AllObjectKeys, ObservationCallback, PropType } from './types.js';
 
 /**
  * A totally tubular instance that tracks a top-level
@@ -18,21 +18,21 @@ export class Tubular<T extends object> {
     this.state = initialState;
   }
 
-  private doSomethingToPath<
-    K extends AllObjectKeys<T>,
-    V = PropType<T, K & string>,
-  >(readPath: K, doSomething: (currVal: V) => V) {
+  private doSomethingToPath<K extends string>(
+    readPath: K & AllObjectKeys<T>,
+    doSomething: (currVal: PropType<T, K>) => PropType<T, K>,
+  ) {
     let thing: any = this.state;
 
-    if (typeof readPath !== "string") {
+    if (typeof readPath !== 'string') {
       return this.getPortionOfStateByPath(thing[readPath]);
     }
 
-    const splitPath = readPath.split(".");
+    const splitPath = readPath.split('.');
 
     const len = splitPath.length;
     for (let i = 0; i < len; i++) {
-      const p = splitPath[i] || "";
+      const p = splitPath[i] || '';
       if (i === len - 1) {
         if (thing) thing[p] = doSomething(thing[p]);
       } else thing = thing?.[p];
@@ -42,30 +42,29 @@ export class Tubular<T extends object> {
     }
   }
 
-  private getPortionOfStateByPath<
-    K extends AllObjectKeys<T>,
-    V = PropType<T, K & string>,
-  >(readPath: K): V | null {
+  private getPortionOfStateByPath<K extends string>(
+    readPath: K & AllObjectKeys<T>,
+  ): PropType<T, K> | null {
     let thing: any = this.state;
 
-    if (typeof readPath !== "string") {
+    if (typeof readPath !== 'string') {
       return this.getPortionOfStateByPath(thing[readPath]);
     }
 
-    const splitPath = readPath.split(".");
+    const splitPath = readPath.split('.');
 
     for (const p of splitPath) {
       thing = thing?.[p];
     }
 
-    return (thing as V) ?? null;
+    return (thing as PropType<T, K>) ?? null;
   }
 
   /**
    * observe changes to some part of state that was updated
    */
-  observe<K extends AllObjectKeys<T>, V = PropType<T, K & string>>(
-    propPath: K,
+  observe<K extends string>(
+    propPath: K & AllObjectKeys<T>,
     observeCallback: ObservationCallback<T>,
   ) {
     const prevForPath = this.observationCallbacks.get(propPath) ?? [];
@@ -75,17 +74,17 @@ export class Tubular<T extends object> {
   /**
    * reads a portion of your state
    */
-  read<K extends AllObjectKeys<T>>(
-    readPath: K,
-  ): PropType<T, K & string> | null {
+  read<K extends string>(
+    readPath: K & AllObjectKeys<T>,
+  ): PropType<T, K> | null {
     return this.getPortionOfStateByPath(readPath);
   }
 
   /**
    * disconnects an observer callback from totally tubular
    */
-  unobserve<K extends AllObjectKeys<T>, V = PropType<T, K & string>>(
-    propPath: K,
+  unobserve<K extends string>(
+    propPath: K & AllObjectKeys<T>,
     observeCallback: ObservationCallback<T>,
   ) {
     const observers = this.observationCallbacks.get(propPath);
@@ -101,9 +100,9 @@ export class Tubular<T extends object> {
   /**
    * updates a portion of your state
    */
-  update<K extends AllObjectKeys<T>>(
-    updatePath: K,
-    valUpdater: (oldVal: PropType<T, K & string>) => PropType<T, K & string>,
+  update<K extends string>(
+    updatePath: K & AllObjectKeys<T>,
+    valUpdater: (oldVal: PropType<T, K>) => PropType<T, K>,
   ) {
     const prevVal = this.read(updatePath);
     let newVal: typeof prevVal | null = null;
@@ -114,8 +113,8 @@ export class Tubular<T extends object> {
       return n;
     });
 
-    this.observationCallbacks
-      .get(updatePath)
-      ?.forEach((cb) => cb(newVal, prevVal, updatePath));
+    for (const cb of this.observationCallbacks.get(updatePath) ?? []) {
+      cb(newVal, prevVal, updatePath);
+    }
   }
 }

@@ -1,51 +1,76 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { Tubular } from './totally-tubular.js';
-import { AllObjectKeys, ObservationCallback, PropType } from './types.js';
+import type { Tubular } from './totally-tubular.js';
+import type { AllObjectKeys, ObservationCallback, PropType } from './types.js';
 
 /**
- * All the same behavior as the normally Tubular class,
- * but includes some react hooks mapped onto the state object
- * for easy access to reading from the state object in react,
- * as well as updating the state
+ * A React hook that binds to a {@link Tubular} instance and a specific key path
+ * within its state.
+ *
+ * Returns a `[value, setter]` tuple that works exactly like React's built-in
+ * `useState`, except reads and writes go through the Tubular store — so every
+ * component (and non-React observer) watching the same path is notified on
+ * every update.
+ *
+ * The setter accepts either a new value directly or an updater function that
+ * receives the current value and returns the next one.
+ *
+ * @example
+ * ```tsx
+ * const store = new Tubular({ user: { name: 'Alice' }, count: 0 });
+ *
+ * function Counter() {
+ *   const [count, setCount] = useTubular(store, 'count');
+ *   return <button onClick={() => setCount(n => (n ?? 0) + 1)}>{count}</button>;
+ * }
+ *
+ * function Greeting() {
+ *   const [name] = useTubular(store, 'user.name');
+ *   return <p>Hello, {name}!</p>;
+ * }
+ * ```
  */
-export class TubularReact<T extends object> extends Tubular<T> {
-  /**
-   * returns a typical useState() like tuple
-   * for you to read and / or update a piece
-   * of Tubular state
-   */
-  useState<K extends AllObjectKeys<T>>(key: K) {
-    type ValueType = PropType<T, K & string>;
+export function useTubular<T extends object, K extends string>(
+  tubular: Tubular<T>,
+  key: K & AllObjectKeys<T>,
+) {
+  type ValueType = PropType<T, K>;
 
-    /** state */
-    const [val, setVal] = useState<ValueType | null>(this.read(key));
+  /** state */
+  const [val, setVal] = useState<ValueType | null>(() => tubular.read(key));
 
-    /** callbacks */
-    const handleUpdateVal = useCallback(
-      (newValOrCallback: ValueType | ((prevVal: ValueType | null) => ValueType)) => {
-        if (typeof newValOrCallback === 'function') {
-          this.update(key, newValOrCallback as (oldVal: ValueType) => ValueType);
-        } else {
-          this.update(key, () => newValOrCallback);
-        }
-      },
-      [key],
-    );
+  /** callbacks */
+  const handleUpdateVal = useCallback(
+    (
+      newValOrCallback: ValueType | ((prevVal: ValueType | null) => ValueType),
+    ) => {
+      if (typeof newValOrCallback === 'function') {
+        tubular.update(
+          key,
+          newValOrCallback as (oldVal: ValueType) => ValueType,
+        );
+      } else {
+        tubular.update(key, () => newValOrCallback);
+      }
+    },
+    [tubular, key],
+  );
 
-    /** effects */
-    useEffect(() => {
-      const observeCb: ObservationCallback<T> = newVal => {
-        setVal(newVal as ValueType | null);
-      };
+  /** effects */
+  useEffect(() => {
+    // Sync in case the value changed between render and effect registration
+    setVal(tubular.read(key) as ValueType | null);
 
-      this.observe(key, observeCb);
+    const observeCb: ObservationCallback<T> = (newVal) => {
+      setVal(newVal as ValueType | null);
+    };
 
-      return () => {
-        this.unobserve(key, observeCb);
-      };
-    }, [key]);
+    tubular.observe(key, observeCb);
 
-    return [val, handleUpdateVal] as const;
-  }
+    return () => {
+      tubular.unobserve(key, observeCb);
+    };
+  }, [tubular, key]);
+
+  return [val, handleUpdateVal] as const;
 }
