@@ -3,8 +3,8 @@
   "description": "A completely framework-agnostic, JavaScript / TypeScript state management and update broadcasting library wit zero dependencies, solid performance and a micro file size.",
   "name": "totally-tubular",
   "type": "module",
-  "main": "./dist/totally-tubular.js",
-  "types": "./dist/totally-tubular.d.ts",
+  "main": "./dist/cjs/index.cjs",
+  "types": "./dist/cjs/index.d.ts",
   "typings": "./dist/totally-tubular.d.ts",
   "version": "0.3.2",
   "keywords": [
@@ -54,6 +54,16 @@
     "react": ">=18"
   },
   "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.cjs"
+      },
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.mjs"
+      }
+    },
     "./react": {
       "require": {
         "types": "./dist/cjs/react.d.ts",
@@ -85,5 +95,6 @@
       }
     },
     "./package.json": "./package.json"
-  }
+  },
+  "module": "./dist/esm/index.mjs"
 }
