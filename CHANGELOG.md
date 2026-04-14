@@ -1,3 +1,17 @@
+## 0.3.3 (2026-04-14)
+
+### 🛠️ Fixes 🛠️
+
+- fix: fixed build by dropping ts-duality. also updated toolchain deps (45d7bbc1de9ddd323a386039e5da6d1ba5b0219d)
+
+
+
+### 🔀 Miscellaneous 🔀
+
+- chore: regen package.json (2554b3e5ebf35bee1f6ee88ecccaa24f956e7939)
+
+---
+
 ## 0.3.2 (2026-03-17)
 
 ### 🛠️ Fixes 🛠️

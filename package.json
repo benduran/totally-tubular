@@ -3,7 +3,7 @@
   "description": "A completely framework-agnostic, JavaScript / TypeScript state management and update broadcasting library wit zero dependencies, solid performance and a micro file size.",
   "name": "totally-tubular",
   "type": "module",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "keywords": [
     "state",
     "management",
