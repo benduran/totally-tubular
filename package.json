@@ -3,9 +3,6 @@
   "description": "A completely framework-agnostic, JavaScript / TypeScript state management and update broadcasting library wit zero dependencies, solid performance and a micro file size.",
   "name": "totally-tubular",
   "type": "module",
-  "main": "./dist/cjs/index.cjs",
-  "types": "./dist/cjs/index.d.ts",
-  "typings": "./dist/totally-tubular.d.ts",
   "version": "0.3.2",
   "keywords": [
     "state",
@@ -30,71 +27,50 @@
     "dist/"
   ],
   "scripts": {
-    "build": "ts-duality --clean",
+    "build": "rm -rf dist/ && tsc --project ./tsconfig.build.json",
     "clean": "rm -rf dist/",
     "test": "bun test",
     "test:watch": "bun test --watch"
   },
   "devDependencies": {
     "@better-builds/lets-version": "^1.6.0",
-    "@better-builds/ts-duality": "^1.3.2",
-    "@biomejs/biome": "^2.4.6",
-    "@commitlint/cli": "^20.4.3",
-    "@commitlint/config-conventional": "^20.4.3",
-    "@happy-dom/global-registrator": "^20.8.3",
+    "@biomejs/biome": "^2.4.11",
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "@happy-dom/global-registrator": "^20.9.0",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@types/bun": "latest",
-    "@types/react": ">=18",
-    "happy-dom": "^20.8.3",
+    "@types/react": "^19.2.14",
+    "happy-dom": "^20.9.0",
     "react": ">=18",
-    "typescript": "^5"
+    "typescript": "^5.9.3"
   },
-  "optionalDependencies": {
+  "peerDependencies": {
     "react": ">=18"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
   },
   "exports": {
     ".": {
-      "require": {
-        "types": "./dist/cjs/index.d.ts",
-        "default": "./dist/cjs/index.cjs"
-      },
-      "import": {
-        "types": "./dist/esm/index.d.ts",
-        "default": "./dist/esm/index.mjs"
-      }
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
     },
     "./react": {
-      "require": {
-        "types": "./dist/cjs/react.d.ts",
-        "default": "./dist/cjs/react.cjs"
-      },
-      "import": {
-        "types": "./dist/esm/react.d.ts",
-        "default": "./dist/esm/react.mjs"
-      }
+      "types": "./dist/react.d.ts",
+      "default": "./dist/react.js"
     },
     "./totally-tubular": {
-      "require": {
-        "types": "./dist/cjs/totally-tubular.d.ts",
-        "default": "./dist/cjs/totally-tubular.cjs"
-      },
-      "import": {
-        "types": "./dist/esm/totally-tubular.d.ts",
-        "default": "./dist/esm/totally-tubular.mjs"
-      }
+      "types": "./dist/totally-tubular.d.ts",
+      "default": "./dist/totally-tubular.js"
     },
     "./types": {
-      "require": {
-        "types": "./dist/cjs/types.d.ts",
-        "default": "./dist/cjs/types.cjs"
-      },
-      "import": {
-        "types": "./dist/esm/types.d.ts",
-        "default": "./dist/esm/types.mjs"
-      }
+      "types": "./dist/types.d.ts",
+      "default": "./dist/types.js"
     },
     "./package.json": "./package.json"
-  },
-  "module": "./dist/esm/index.mjs"
+  }
 }
