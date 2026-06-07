@@ -1,3 +1,11 @@
+## 0.4.0 (2026-06-07)
+
+### ✨ Features ✨
+
+- feat: added a reset function for clearing state back to the initial (f90ab1aca4893fb5e29a26a70a60f0c7100c12e4)
+
+---
+
 ## 0.3.3 (2026-04-14)
 
 ### 🛠️ Fixes 🛠️
