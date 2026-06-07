@@ -30,7 +30,11 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "skipDefaultLibCheck": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": [
+      "bun",
+      "react"
+    ]
   },
   "include": [
     "src/"

@@ -74,3 +74,29 @@ export function useTubular<T extends object, K extends string>(
 
   return [val, handleUpdateVal] as const;
 }
+
+/**
+ * A React hook that returns a stable callback to reset a {@link Tubular} store
+ * back to its initial state.
+ *
+ * Every key in the store is restored to the value originally passed to the
+ * constructor, and every registered observer (including {@link useTubular}
+ * hooks) is notified of each change.
+ *
+ * The returned callback is stable across re-renders.
+ * It never changes its identity, so it is safe to pass as a dependency to `useEffect` or as a prop
+ * to memoized components.
+ *
+ * @example
+ * ```tsx
+ * const store = new Tubular({ name: 'Alice', count: 0 });
+ *
+ * function ResetButton() {
+ *   const handleReset = useTubularReset(store);
+ *   return <button onClick={handleReset}>Reset</button>;
+ * }
+ * ```
+ */
+export function useTubularReset<T extends object>(tubular: Tubular<T>) {
+  return useCallback(() => tubular.reset(), [tubular]);
+}

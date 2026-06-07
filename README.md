@@ -18,7 +18,7 @@ npm i totally-tubular --save
 
 ## Core concepts
 
-A `Tubular` instance wraps an object and gives you four things:
+A `Tubular` instance wraps an object and gives you five things:
 
 | Method | What it does |
 |---|---|
@@ -26,6 +26,7 @@ A `Tubular` instance wraps an object and gives you four things:
 | `update(path, fn)` | Calls `fn` with the current value, stores the return value, then notifies all observers |
 | `observe(path, fn)` | Registers a callback that fires whenever `path` is updated |
 | `unobserve(path, fn)` | Removes a previously registered callback |
+| `reset()` | Restores every key to its initial value and notifies all observers of each change |
 
 Paths are fully type-checked. TypeScript knows every valid dot-path into your state shape, so you get autocomplete and a compile error if you mistype a key.
 
@@ -61,6 +62,30 @@ console.info(store.read("meta.title")); // "Director"
 store.update("meta.title", (prev) => `Supreme ${prev}`);
 
 console.info(store.read("meta.title")); // "Supreme Director"
+```
+
+## Resetting state
+
+Call `reset()` to restore your entire state back to the value you passed to the constructor. Every updated key is restored and every registered observer fires with the new (initial) value.
+
+```typescript
+const store = new Tubular({
+  name: "Alice",
+  count: 0,
+  settings: { theme: "light" },
+});
+
+store.update("name", () => "Bob");
+store.update("count", (prev) => prev + 1);
+store.update("settings.theme", () => "dark");
+
+store.observe("name", (newVal, oldVal) => {
+  console.log(`name: ${oldVal} -> ${newVal}`);
+});
+
+store.reset();
+// Logs: name: Bob -> Alice
+// Reads back: "Alice", 0, { theme: "light" }
 ```
 
 ## React
@@ -114,6 +139,24 @@ setCount((prev) => (prev ?? 0) + 1);
 
 `useTubular` automatically unsubscribes when the component unmounts, so you
 don't need to manage cleanup yourself.
+
+### Resetting from React
+
+Import `useTubularReset` from `totally-tubular/react`. It returns a stable
+callback that restores the store to its initial state. Every `useTubular` hook
+watching the store re-renders with the restored value.
+
+```tsx
+import { useTubularReset } from "totally-tubular/react";
+
+function ResetButton() {
+  const handleReset = useTubularReset(store);
+  return <button onClick={handleReset}>Reset</button>;
+}
+```
+
+The callback identity never changes, so it's safe to pass directly as an event
+handler or as a dependency to `useEffect`.
 
 ## Things you should know
 

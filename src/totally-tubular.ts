@@ -1,3 +1,4 @@
+import { isArray, isNullOrUndefined, isObject } from './object.js';
 import type { AllObjectKeys, ObservationCallback, PropType } from './types.js';
 
 /**
@@ -13,9 +14,11 @@ export class Tubular<T extends object> {
   > = new Map();
 
   private state: T;
+  private initialStateClone: T;
 
   constructor(initialState: T) {
     this.state = initialState;
+    this.initialStateClone = globalThis.structuredClone(this.state);
   }
 
   private doSomethingToPath<K extends string>(
@@ -23,10 +26,6 @@ export class Tubular<T extends object> {
     doSomething: (currVal: PropType<T, K>) => PropType<T, K>,
   ) {
     let thing: any = this.state;
-
-    if (typeof readPath !== 'string') {
-      return this.getPortionOfStateByPath(thing[readPath]);
-    }
 
     const splitPath = readPath.split('.');
 
@@ -37,19 +36,12 @@ export class Tubular<T extends object> {
         if (thing) thing[p] = doSomething(thing[p]);
       } else thing = thing?.[p];
     }
-    for (const p of splitPath) {
-      thing = thing?.[p];
-    }
   }
 
   private getPortionOfStateByPath<K extends string>(
     readPath: K & AllObjectKeys<T>,
   ): PropType<T, K> | null {
     let thing: any = this.state;
-
-    if (typeof readPath !== 'string') {
-      return this.getPortionOfStateByPath(thing[readPath]);
-    }
 
     const splitPath = readPath.split('.');
 
@@ -78,6 +70,36 @@ export class Tubular<T extends object> {
     readPath: K & AllObjectKeys<T>,
   ): PropType<T, K> | null {
     return this.getPortionOfStateByPath(readPath);
+  }
+
+  private resetImpl(parentKey?: string) {
+    let sourceObj: any = this.initialStateClone;
+    if (parentKey) {
+      for (const p of parentKey.split('.')) {
+        sourceObj = sourceObj?.[p];
+      }
+      if (isNullOrUndefined(sourceObj) || !isObject(sourceObj)) return;
+    }
+
+    for (const [key, val] of Object.entries(sourceObj)) {
+      const childKey = parentKey ? `${parentKey}.${key}` : key;
+      if (!isNullOrUndefined(val) && isObject(val) && !isArray(val)) {
+        this.resetImpl(childKey);
+      } else {
+        this.update(
+          childKey as AllObjectKeys<T>,
+          () => val as PropType<T, any>,
+        );
+      }
+    }
+  }
+
+  /**
+   * resets the state back to its initial value
+   * (the value you provided to the constructor)
+   */
+  reset() {
+    this.resetImpl();
   }
 
   /**
