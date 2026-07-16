@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'bun:test';
+import { describe, expect, it } from 'vitest';
 import { act, renderHook } from '@testing-library/react';
 import { useTubular, useTubularReset } from './react.js';
 import { Tubular } from './totally-tubular.js';
@@ -57,14 +57,14 @@ describe('useTubular', () => {
     const t = new Tubular(makeInitialState());
 
     const { result, rerender } = renderHook(() => useTubular(t, 'food.pasta'));
-    expect(result.current[0]).toBeFalse();
+    expect(result.current[0]).toBeFalsy();
 
     act(() => {
       result.current[1]((prev) => !prev);
     });
 
     rerender();
-    expect(result.current[0]).toBeTrue();
+    expect(result.current[0]).toBeTruthy();
   });
 
   it('should notify all hooks observing the same key when one updates', () => {
@@ -77,8 +77,8 @@ describe('useTubular', () => {
       useTubular(t, 'drink.beer'),
     );
 
-    expect(resultA.current[0]).toBeTrue();
-    expect(resultB.current[0]).toBeTrue();
+    expect(resultA.current[0]).toBeTruthy();
+    expect(resultB.current[0]).toBeTruthy();
 
     act(() => {
       resultA.current[1](false);
@@ -86,8 +86,8 @@ describe('useTubular', () => {
 
     rerenderA();
     rerenderB();
-    expect(resultA.current[0]).toBeFalse();
-    expect(resultB.current[0]).toBeFalse();
+    expect(resultA.current[0]).toBeFalsy();
+    expect(resultB.current[0]).toBeFalsy();
   });
 
   it('should unobserve when the hook unmounts', () => {
@@ -152,7 +152,7 @@ describe('useTubularReset', () => {
     rerenderDrink();
     rerenderPizza();
     expect(drinkResult.current[0]).toBe('water');
-    expect(pizzaResult.current[0]).toBeFalse();
+    expect(pizzaResult.current[0]).toBeFalsy();
 
     act(() => {
       resetResult.current();
@@ -160,7 +160,7 @@ describe('useTubularReset', () => {
     rerenderDrink();
     rerenderPizza();
     expect(drinkResult.current[0]).toBe('guiness');
-    expect(pizzaResult.current[0]).toBeTrue();
+    expect(pizzaResult.current[0]).toBeTruthy();
   });
 
   it('should not change values when nothing was updated', () => {

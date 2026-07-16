@@ -29,8 +29,8 @@
   "scripts": {
     "build": "rm -rf dist/ && tsc --project ./tsconfig.build.json",
     "clean": "rm -rf dist/",
-    "test": "bun test",
-    "test:watch": "bun test --watch"
+    "test": "vitest test",
+    "test:watch": "vitest test --watch"
   },
   "devDependencies": {
     "@better-builds/lets-version": "^1.6.0",
@@ -40,13 +40,17 @@
     "@happy-dom/global-registrator": "^20.10.2",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
-    "@types/bun": "latest",
     "@types/react": "^19.2.17",
+    "@types/node": "^26.1.1",
     "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
     "happy-dom": "^20.10.2",
-    "react-dom": "^19.2.7",
     "react": "^19.2.7",
-    "typescript": "^5.9.3"
+    "react-dom": "^19.2.7",
+    "tsx": "^4.23.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.1.4",
+    "vitest": "^4.1.10"
   },
   "peerDependencies": {
     "react": ">=18"

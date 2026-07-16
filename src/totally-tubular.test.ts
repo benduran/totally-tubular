@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from 'bun:test';
+import { describe, expect, test, vi } from 'vitest';
 
 import { Tubular } from './totally-tubular.js';
 

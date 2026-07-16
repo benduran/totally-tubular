@@ -1,0 +1,12 @@
+linkWorkspacePackages: deep
+engineStrict: true
+
+minimumReleaseAge: 7200
+minimumReleaseAgeExclude:
+  - 'typescript'
+
+onlyBuiltDependencies:
+  - esbuild
+
+allowBuilds:
+  esbuild: set this to true or false

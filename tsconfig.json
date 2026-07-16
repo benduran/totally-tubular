@@ -32,7 +32,7 @@
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
     "types": [
-      "bun",
+      "node",
       "react"
     ]
   },
