@@ -1,3 +1,18 @@
+## 0.4.1 (2026-07-16)
+
+### 🔀 Miscellaneous 🔀
+
+- chore: updated perf tests and increased key depth to 10 (63622bac5ca28a5798aa9ecd67d1746ff0708662)
+- chore: so long, bun (528a39af6ff32701fb6d936d5a8f0d441f7eaa13)
+
+
+
+### 📖 Docs 📖
+
+- docs: updated mac perf (934476c76aef2beb52c59322b2deeee40660751a)
+
+---
+
 ## 0.4.0 (2026-06-07)
 
 ### ✨ Features ✨

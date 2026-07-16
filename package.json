@@ -3,7 +3,7 @@
   "description": "A completely framework-agnostic, JavaScript / TypeScript state management and update broadcasting library wit zero dependencies, solid performance and a micro file size.",
   "name": "totally-tubular",
   "type": "module",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "keywords": [
     "state",
     "management",
@@ -38,7 +38,6 @@
     "@biomejs/biome": "^2.4.16",
     "@commitlint/cli": "^20.5.3",
     "@commitlint/config-conventional": "^20.5.3",
-
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.2.17",
