@@ -30,6 +30,7 @@
     "build": "rm -rf dist/ && tsc --project ./tsconfig.build.json",
     "clean": "rm -rf dist/",
     "test": "vitest test",
+    "test:performance": "tsx ./performanceTests.ts",
     "test:watch": "vitest test --watch"
   },
   "devDependencies": {
@@ -37,7 +38,7 @@
     "@biomejs/biome": "^2.4.16",
     "@commitlint/cli": "^20.5.3",
     "@commitlint/config-conventional": "^20.5.3",
-    "@happy-dom/global-registrator": "^20.10.2",
+
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
     "@types/react": "^19.2.17",

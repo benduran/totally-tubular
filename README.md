@@ -168,53 +168,55 @@ handler or as a dependency to `useEffect`.
 
 ## Performance benchmarks
 
+All benchmarks were run with Node.js 26.5.0 using the `tsx` TypeScript interpreter.
+
 ### Apple M3 Max · 36 GB RAM · macOS Sequoia 15.5
 
 ```
 -----shallow state object-----
 
-1,000 updates to "name" string val with 10 observers: 0.004451624999999993s
-1,000 updates to "name" string val with 100 observers: 0.0014582920000000001s
-1,000 updates to "name" string val with 1000 observers: 0.0038668329999999996s
-10,000 updates to "name" string val with 10 observers: 0.002263458s
-10,000 updates to "name" string val with 100 observers: 0.0027686669999999938s
-10,000 updates to "name" string val with 1000 observers: 0.010021957999999997s
-100,000 updates to "name" string val with 10 observers: 0.009292833000000002s
-100,000 updates to "name" string val with 100 observers: 0.018003167000000004s
-100,000 updates to "name" string val with 1000 observers: 0.09387937499999999s
-1,000,000 updates to "name" string val with 10 observers: 0.11707874999999998s
-1,000,000 updates to "name" string val with 100 observers: 0.18760720800000003s
-1,000,000 updates to "name" string val with 1000 observers: 0.953406333s
+1,000 updates to "name" string val with 10 observers: 0.0005343750000000114s
+1,000 updates to "name" string val with 100 observers: 0.0006880840000000035s
+1,000 updates to "name" string val with 1000 observers: 0.002814292000000023s
+10,000 updates to "name" string val with 10 observers: 0.0007928750000000377s
+10,000 updates to "name" string val with 100 observers: 0.0017347500000000195s
+10,000 updates to "name" string val with 1000 observers: 0.007635916000000009s
+100,000 updates to "name" string val with 10 observers: 0.01587337500000001s
+100,000 updates to "name" string val with 100 observers: 0.020373334s
+100,000 updates to "name" string val with 1000 observers: 0.12892133400000005s
+1,000,000 updates to "name" string val with 10 observers: 0.14660462499999993s
+1,000,000 updates to "name" string val with 100 observers: 0.20982341600000007s
+1,000,000 updates to "name" string val with 1000 observers: 0.8595329590000002s
 
 -----medium state object-----
 
-1,000 updates to "user.settings.theme" string val with 10 observers: 0.0004967080000001261s
-1,000 updates to "user.settings.theme" string val with 100 observers: 0.0005447920000001431s
-1,000 updates to "user.settings.theme" string val with 1000 observers: 0.002648750000000064s
-10,000 updates to "user.settings.theme" string val with 10 observers: 0.0015272500000000945s
-10,000 updates to "user.settings.theme" string val with 100 observers: 0.0019369999999998982s
-10,000 updates to "user.settings.theme" string val with 1000 observers: 0.009341458000000103s
-100,000 updates to "user.settings.theme" string val with 10 observers: 0.010589375000000019s
-100,000 updates to "user.settings.theme" string val with 100 observers: 0.018273999999999888s
-100,000 updates to "user.settings.theme" string val with 1000 observers: 0.09421074999999997s
-1,000,000 updates to "user.settings.theme" string val with 10 observers: 0.12160291699999994s
-1,000,000 updates to "user.settings.theme" string val with 100 observers: 0.17455837500000007s
-1,000,000 updates to "user.settings.theme" string val with 1000 observers: 0.9426468749999999s
+1,000 updates to "user.settings.theme" string val with 10 observers: 0.0011529580000001261s
+1,000 updates to "user.settings.theme" string val with 100 observers: 0.002206040999999914s
+1,000 updates to "user.settings.theme" string val with 1000 observers: 0.006846457999999984s
+10,000 updates to "user.settings.theme" string val with 10 observers: 0.01919616700000006s
+10,000 updates to "user.settings.theme" string val with 100 observers: 0.007707957999999963s
+10,000 updates to "user.settings.theme" string val with 1000 observers: 0.014114458000000014s
+100,000 updates to "user.settings.theme" string val with 10 observers: 0.012900958000000174s
+100,000 updates to "user.settings.theme" string val with 100 observers: 0.018197167000000035s
+100,000 updates to "user.settings.theme" string val with 1000 observers: 0.09116387499999973s
+1,000,000 updates to "user.settings.theme" string val with 10 observers: 0.18448416599999973s
+1,000,000 updates to "user.settings.theme" string val with 100 observers: 0.24980879200000028s
+1,000,000 updates to "user.settings.theme" string val with 1000 observers: 0.8701055419999998s
 
 -----deep state object-----
 
-1,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 10 observers: 0.0002659169999997175s
-1,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 100 observers: 0.00025624999999990906s
-1,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 1000 observers: 0.0009017499999999927s
-10,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 10 observers: 0.0015940000000000509s
-10,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 100 observers: 0.002409874999999829s
-10,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 1000 observers: 0.009845749999999953s
-100,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 10 observers: 0.017372292000000015s
-100,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 100 observers: 0.02954466599999978s
-100,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 1000 observers: 0.10030825000000004s
-1,000,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 10 observers: 0.1631335829999998s
-1,000,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 100 observers: 0.250552416s
-1,000,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 1000 observers: 0.9988650829999997s
+1,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 10 observers: 0.0002052080000003116s
+1,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 100 observers: 0.0002497920000000704s
+1,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 1000 observers: 0.001332209000000148s
+10,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 10 observers: 0.0018820000000000618s
+10,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 100 observers: 0.0024639170000000377s
+10,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 1000 observers: 0.014082249999999932s
+100,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 10 observers: 0.021280209000000015s
+100,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 100 observers: 0.02714695800000027s
+100,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 1000 observers: 0.09046704200000022s
+1,000,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 10 observers: 0.2687363329999998s
+1,000,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 100 observers: 0.3244868329999999s
+1,000,000 updates to "zdeepSettings.level1.level2.level3.level4.level5.level6.currentValue" string val with 1000 observers: 0.9486893330000002s
 ```
 
 ### Intel i9-13900HX · 32 GB RAM · Windows 11

@@ -411,7 +411,7 @@ function runPerfTest<T extends object>(
   let v = String(t.read(updatePath));
   for (let i = 0; i < amt; i++) {
     v += `-${i}`;
-    // @ts-expect-error - don't care about typings for the perf test
+    // @ts-expect-error - union path types make the updater return type too wide
     t.update(updatePath as any, () => v);
   }
 

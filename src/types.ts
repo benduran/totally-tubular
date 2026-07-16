@@ -19,7 +19,7 @@ type IsCollection<T> = T extends readonly any[] | Map<any, any> | Set<any>
 /**
  * Produces every dot-separated key path into T as a string union.
  *
- * - The `Depth` tuple acts as a recursion counter: when its length reaches 5 the
+ * - The `Depth` tuple acts as a recursion counter: when its length reaches 10 the
  *   type resolves to `never`, which caps the union size and prevents the language
  *   server from hanging on deeply-nested or self-referential shapes.
  * - Top-level keys are included as bare strings (`K`), so this type supersedes
@@ -29,7 +29,10 @@ type IsCollection<T> = T extends readonly any[] | Map<any, any> | Set<any>
  * - Returning `never` (not `''`) from every terminal branch avoids the need for
  *   a secondary `Extract<D, string>` pass over the full union.
  */
-export type DotNestedKeys<T, Depth extends 1[] = []> = Depth['length'] extends 5
+export type DotNestedKeys<
+  T,
+  Depth extends 1[] = [],
+> = Depth['length'] extends 10
   ? never
   : T extends object
     ? IsCollection<T> extends true
