@@ -174,12 +174,7 @@ describe('reset', () => {
       'water',
       'drink.kind',
     );
-    expect(pizzaOb).toHaveBeenNthCalledWith(
-      2,
-      true,
-      false,
-      'food.pizza',
-    );
+    expect(pizzaOb).toHaveBeenNthCalledWith(2, true, false, 'food.pizza');
   });
 
   test('should be idempotent', () => {
@@ -237,11 +232,6 @@ describe('reset', () => {
     t.reset();
     t.update('drink.kind', () => 'corona');
     expect(ob).toHaveBeenCalledTimes(3);
-    expect(ob).toHaveBeenNthCalledWith(
-      3,
-      'corona',
-      'guiness',
-      'drink.kind',
-    );
+    expect(ob).toHaveBeenNthCalledWith(3, 'corona', 'guiness', 'drink.kind');
   });
 });

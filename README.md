@@ -140,6 +140,11 @@ setCount((prev) => (prev ?? 0) + 1);
 `useTubular` automatically unsubscribes when the component unmounts, so you
 don't need to manage cleanup yourself.
 
+`useTubular` is built on React's `useSyncExternalStore`, so it works with
+server-side rendering: on the server it renders the store's current value
+without subscribing, and on the client it subscribes during hydration. The
+React bindings require React 18 or later.
+
 ### Resetting from React
 
 Import `useTubularReset` from `totally-tubular/react`. It returns a stable
@@ -157,6 +162,44 @@ function ResetButton() {
 
 The callback identity never changes, so it's safe to pass directly as an event
 handler or as a dependency to `useEffect`.
+
+### Binding hooks to a store
+
+Import `createUseTubular` and `createUseTubularReset` from
+`totally-tubular/react` to create hooks hard-locked to a single `Tubular`
+instance, so you don't have to pass the store around at every call site.
+
+Call them once, outside your components — they aren't hooks themselves, so
+module scope is safe — and name what they return with a `use` prefix so
+React's rules-of-hooks linting treats it as a hook.
+
+```tsx
+import { createUseTubular, createUseTubularReset } from "totally-tubular/react";
+
+// Using the `store` created in the example above
+const useAppState = createUseTubular(store);
+const useAppReset = createUseTubularReset(store);
+
+function Counter() {
+  const [count, setCount] = useAppState("count");
+
+  return (
+    <button onClick={() => setCount((n) => (n ?? 0) + 1)}>
+      Clicked {count} times
+    </button>
+  );
+}
+
+function ResetButton() {
+  const handleReset = useAppReset();
+  return <button onClick={handleReset}>Reset</button>;
+}
+```
+
+The returned hooks behave exactly like `useTubular` and `useTubularReset`
+minus the store argument. Key paths stay fully type-checked against the bound
+store's state shape, and each hook is scoped to exactly one instance — bound
+hooks from different stores never cross-talk.
 
 ## Things you should know
 
