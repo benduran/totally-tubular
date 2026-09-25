@@ -1,3 +1,11 @@
+## 0.5.0 (2026-09-25)
+
+### ✨ Features ✨
+
+- feat: added factory versions of the react hooks and swapped to using useSyncExternalStore to be SSR-friendly (3e02f045858734d75af72059743885057c50aad0)
+
+---
+
 ## 0.4.1 (2026-07-16)
 
 ### 🔀 Miscellaneous 🔀
