@@ -1,3 +1,11 @@
+## 0.5.1 (2026-10-12)
+
+### 📖 Docs 📖
+
+- docs: repoint to codeberg (725b399e50ab9e04cf6fe6c851c33e601e663ce6)
+
+---
+
 ## 0.5.0 (2026-09-25)
 
 ### ✨ Features ✨
