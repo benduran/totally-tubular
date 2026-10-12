@@ -1,3 +1,5 @@
+# This project has moved to Codeberg: https://codeberg.org/benduran/totally-tubular
+
 # totally-tubular
 
 A framework-agnostic JavaScript / TypeScript state management library with zero dependencies, a tiny file size, and solid performance.

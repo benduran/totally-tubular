@@ -17,12 +17,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/benduran/totally-tubular.git"
+    "url": "git+https://codeberg.org/benduran/totally-tubular.git"
   },
   "bugs": {
-    "url": "https://github.com/benduran/totally-tubular/issues"
+    "url": "https://codeberg.org/benduran/totally-tubular/issues"
   },
-  "homepage": "https://github.com/benduran/totally-tubular#readme",
+  "homepage": "https://codeberg.org/benduran/totally-tubular",
   "files": [
     "dist/"
   ],
